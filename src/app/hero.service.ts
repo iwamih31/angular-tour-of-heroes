@@ -47,6 +47,14 @@ export class HeroService {
 		);
 	}
 
+	/** POST: サーバーに新しいヒーローを登録する */
+	addHero(hero: Hero): Observable<Hero> {
+		return this.http.post<Hero>(this.heroesUrl, hero, this.httpOptions).pipe(
+			tap((newHero: Hero) => this.log(`added hero w/ id=${newHero.id}`)),
+			catchError(this.handleError<Hero>('addHero'))
+		);
+	}
+
 	/** HeroServiceのメッセージをMessageServiceを使って記録 */
 	private log(message: string) {
 		this.messageService.add(`HeroService: ${message}`);
