@@ -64,6 +64,18 @@ export class HeroService {
 		);
 	}
 
+	/* 検索語を含むヒーローを取得する */
+searchHeroes(term: string): Observable<Hero[]> {
+  if (!term.trim()) {
+    // 検索語がない場合、空のヒーロー配列を返す
+    return of([]);
+  }
+  return this.http.get<Hero[]>(`${this.heroesUrl}/?name=${term}`).pipe(
+    tap(_ => this.log(`found heroes matching "${term}"`)),
+    catchError(this.handleError<Hero[]>('searchHeroes', []))
+  );
+}
+
 	/** HeroServiceのメッセージをMessageServiceを使って記録 */
 	private log(message: string) {
 		this.messageService.add(`HeroService: ${message}`);
